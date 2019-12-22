@@ -1,15 +1,13 @@
 const { curry } = require("ramda")
 const add = (a, y) => a + y
 const devide = (x, y) => x / y
-//curry function
+
 const toPair = f => (x, y) => f(x, y)
 const result = toPair(add)(1, 2)
 
-//flip
 const flip = f => (x, y) => f(y, x)
 const result2 = flip(devide)(2, 1)
 
-//curry
 // const curry = f => a => b => f(a, b)
 const result3 = curry(add)(2)(2)
 
@@ -27,4 +25,11 @@ const replace = curry((regex, replacement, str) =>
 )
 const replaceVowels = replace(/[hl]/gi, "!")
 const result6 = replaceVowels("hello world")
-console.log(result6)
+
+const splitter = curry((delimeter, str) => str.split(delimeter))
+const splitterByEq = splitter("=")
+const res = splitterByEq("hello=world")
+
+const miner = curry((a, b) => b - a)
+const miner10 = miner(10)
+const r = miner10(100)
