@@ -33,4 +33,27 @@ const getHalfOfLargeNumber = xs =>
     .fold(x => x)
 
 const r2 = getHalfOfLargeNumber([100, 1, 2, 3, 4, 5])
-console.log(r2)
+
+const percentToFloat = x =>
+  typeof x === "string"
+    ? Box(x)
+        .map(x => x.replace(/\%/), "")
+        .map(x => parseFloat(x))
+        .fold(x => x * 0.01)
+    : null
+
+const result2 = percentToFloat("20%")
+
+const parseMoney = x =>
+  Box(x)
+    .map(x => parseFloat(x))
+    .fold(x => x)
+
+const applyDiscount = (price, discount) =>
+  Box(parseMoney(price)).fold(() =>
+    Box(percentToFloat(discount))
+      .map(_ => price + discount)
+      .fold(x => x),
+  )
+
+console.log(applyDiscount(10, "20%"))
