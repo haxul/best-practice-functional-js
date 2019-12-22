@@ -1,4 +1,5 @@
 const { compose, flip, head, curry } = require("ramda")
+
 const Box = x => ({
   map: f => Box(f(x)),
   fold: f => f(x),
@@ -25,4 +26,11 @@ const getFirsWord = str =>
     .fold(xs => xs.join(" "))
 const r = getFirsWord("hello world")
 
-console.log(r)
+const getHalfOfLargeNumber = xs =>
+  Box(xs)
+    .map(xs => Math.max(...xs))
+    .map(x => x / 2)
+    .fold(x => x)
+
+const r2 = getHalfOfLargeNumber([100, 1, 2, 3, 4, 5])
+console.log(r2)
