@@ -67,5 +67,3 @@ const parseDbUrl = c =>
     () => null,
     c => c.url.match(""),
   )
-
-console.log(parseDbUrl(""))
