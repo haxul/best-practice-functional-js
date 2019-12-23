@@ -3,14 +3,12 @@ const Right = x => ({
   chain: f => f(x),
   map: f => Right(f(x)),
   fold: (f, g) => g(x),
-  toString: x,
 })
 
 const Wrong = x => ({
   chain: f => Wrong(x),
   map: f => Wrong(x),
   fold: (f, g) => f(x),
-  toString: x,
 })
 
 const findColor = name => {
@@ -67,3 +65,12 @@ const parseDbUrl = c =>
     () => null,
     c => c.url.match(""),
   )
+
+const startApp = cng =>
+  tryCatch(() => fs.readFileSync(cng))
+    .chain(parsed => fromNullable(parsed))
+    .map(cng => JSON.parse(cng))
+    .fold(
+      () => "cannot get config",
+      ([_, user, password, db]) => ` ${user} ${password} ${db}`,
+    )
