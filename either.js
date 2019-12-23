@@ -3,6 +3,7 @@ const Right = x => ({
   chain: f => f(x),
   map: f => Right(f(x)),
   fold: (f, g) => g(x),
+  toString: x,
 })
 
 const Wrong = x => ({
@@ -27,3 +28,44 @@ const result = findColor("red")
     () => "wrong",
     x => x,
   )
+const fromNullable = x => (x ? Right(x) : Wrong(null))
+
+const tryCatch = f => {
+  try {
+    return Right(f())
+  } catch (error) {
+    return Wrong(error)
+  }
+}
+
+const getPort = () =>
+  tryCatch(() => fs.readFileSync("config.json"))
+    .map(string => JSON.parse(string))
+    .map(config => config.port)
+    .fold(
+      () => 3000,
+      x => x,
+    )
+
+const street = user =>
+  fromNullable(user.address).fold(
+    () => "no street",
+    address => address.street,
+  )
+
+const streetName = user =>
+  fromNullable(user.address)
+    .map(address => address.street)
+    .chain(street => fromNullable(street.name))
+    .fold(
+      () => "no street",
+      x => x,
+    )
+
+const parseDbUrl = c =>
+  tryCatch(() => JSON.parse(c)).fold(
+    () => null,
+    c => c.url.match(""),
+  )
+
+console.log(parseDbUrl(""))
